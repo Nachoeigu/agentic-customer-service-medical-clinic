@@ -1,0 +1,9 @@
+langgraph
+langchain
+langchain_openai
+langchain_community
+langchain_core
+python-dotenv
+langchain_pinecone
+pinecone
+jq
