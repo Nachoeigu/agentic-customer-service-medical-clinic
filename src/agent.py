@@ -92,6 +92,7 @@ class IdentificationNumberModel(BaseModel):
 def check_availability(desired_date:DateModel, specialization:Literal["general_dentist", "cosmetic_dentist", "prosthodontist", "pediatric_dentist","emergency_dentist","oral_surgeon","orthodontist"]):
     """
     Checking the database if we have availability for the specific specialization.
+    The parameters should be mentioned by the user in the query
     """
     desired_date = desired_date.date
     #Dummy data
@@ -108,21 +109,24 @@ def check_availability(desired_date:DateModel, specialization:Literal["general_d
 @tool
 def reschedule_appointment(old_date:DateTimeModel, new_date:DateTimeModel, dni_number:IdentificationNumberModel, doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
     """
-    Rescheduling an appointment
+    Rescheduling an appointment.
+    The parameters should be mentioned by the user in the query.
     """
     return True
 
 @tool
 def cancel_appointment(date:DateTimeModel, dni_number:IdentificationNumberModel, doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
     """
-    Canceling an appointment
+    Canceling an appointment.
+    The parameters should be mentioned by the user in the query.
     """
     return True
 
 @tool
 def get_catalog_specialists():
     """
-    Obtain information about the doctors and specializations/services we provide
+    Obtain information about the doctors and specializations/services we provide.
+    The parameters should be mentioned by the user in the query
     """
     with open(f"{WORKDIR}/data/catalog.json","r") as file:
         file = json.loads(file.read())
@@ -132,14 +136,16 @@ def get_catalog_specialists():
 @tool
 def set_appointment(desired_date:DateTimeModel, dni_number:IdentificationNumberModel, specialization:Literal["general_dentist", "cosmetic_dentist", "prosthodontist", "pediatric_dentist","emergency_dentist","oral_surgeon","orthodontist"]):
     """
-    Set appointment with the doctor
+    Set appointment with the doctor.
+The parameters should be mentioned by the user in the query.
     """
     return True
 
 @tool
 def check_results(dni_number:IdentificationNumberModel):
     """
-    Check if the result of the pacient is available
+    Check if the result of the pacient is available.
+    The parameters should be mentioned by the user in the query
     """
     return True
 
@@ -147,13 +153,16 @@ def check_results(dni_number:IdentificationNumberModel):
 def reminder_appointment(dni_number:IdentificationNumberModel):
     """
     Returns when the pacient has its appointment with the doctor
+    The parameters should be mentioned by the user in the query
     """
     return "You have for next monday at 7 am"
 
 @tool
 def retrieve_faq_info(question:str):
     """
-    Retrieve documents from general questions about the medical clinic
+    Retrieve documents or additional info from general questions about the medical clinic.
+    Call this tool if question is regarding center:
+    For example: is it open? Do you have parking? Can  I go with bike? etc...
     """
     return rag_chain.invoke(question)
 
@@ -184,7 +193,7 @@ def should_continue_with_feedback(state: MessagesState) -> Literal["agent", "end
 
 
 def call_model(state: MessagesState):
-    messages = [SystemMessage(content=f"You are helpful assistant in Ovide Clinic, dental care center in California (United States).\nAs reference, this is the CURRENT TIME: {datetime.now().strftime('%Y-%m-%d %H:%M, %A')}.\nKeep a friendly, professional tone.\n If answer for user query is not in chat history, mandatory to call a tool.")] + state['messages']
+    messages = [SystemMessage(content=f"You are helpful assistant in Ovide Clinic, dental care center in California (United States).\nAs reference, this is the CURRENT TIME: {datetime.now().strftime('%Y-%m-%d %H:%M, %A')}.\nKeep a friendly, professional tone.\n Before calling a tool, ensure the user pass all the necesarry parameters, don´t assume parameters that it didnt say explicitly.\nDon't force users to write in the way the system needs. it is your job to understand the user indication in the correct format.")] + state['messages']
     response = model.invoke(messages)
     return {"messages": [response]}
 
