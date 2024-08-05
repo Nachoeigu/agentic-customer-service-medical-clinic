@@ -48,6 +48,7 @@ from langchain_core.pydantic_v1 import constr, BaseModel, Field, validator
 import re
 import pandas as pd
 
+
 class DateTimeModel(BaseModel):
     """
     The way the date should be structured and formatted
@@ -101,7 +102,7 @@ def check_availability(desired_date:DateModel, specialization:Literal["general_d
     if len(rows) == 0:
         output = "No availability in the entire day"
     else:
-        output = '\n'.join(', '.join(f"{col}: {row[col]}" for col in rows.columns) for _, row in rows.iterrows())
+        output = "Founded in the database:\n"+'\n'.join(', '.join(f"({col}: {row[col]})" for col in rows.columns) for _, row in rows.iterrows())
 
     return output
 
@@ -111,7 +112,15 @@ def reschedule_appointment(old_date:DateTimeModel, new_date:DateTimeModel, id_nu
     Rescheduling an appointment.
     The parameters should be mentioned by the user in the query.
     """
-    return True
+    #Dummy data
+    df = pd.read_csv(f'{WORKDIR}/data/syntetic_data/availability.csv')
+    available_for_desired_date = df[(df['date_slot'] == new_date.date)&(df['is_available'] == True)&(df['doctor_name'] == doctor_name)]
+    if len(available_for_desired_date) == 0:
+        return "Not available slots in the desired period"
+    else:
+        cancel_appointment(date = old_date.date, id_number = id_number.id)
+        set_appointment(desired_date = new_date.date, id_number = id_number.id)
+        return "Succesfully rescheduled for the desired time"
 
 @tool
 def cancel_appointment(date:DateTimeModel, id_number:IdentificationNumberModel, doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
@@ -119,7 +128,15 @@ def cancel_appointment(date:DateTimeModel, id_number:IdentificationNumberModel, 
     Canceling an appointment.
     The parameters should be mentioned by the user in the query.
     """
-    return True
+    df = pd.read_csv(f'{WORKDIR}/data/syntetic_data/availability.csv')
+    case_to_remove = df[(df['date_slot'] == date.date)&(df['patient_to_attend'] == id_number.id)&(df['doctor_name'] == doctor_name)]
+    if len(case_to_remove) == 0:
+        return "You don´t have any appointment with that specifications"
+    else:
+        df.loc[(df['date_slot'] == date.date) & (df['patient_to_attend'] == id_number.id) & (df['doctor_name'] == doctor_name), ['is_available', 'patient_to_attend']] = [True, None]
+        df.to_csv(f'{WORKDIR}/data/syntetic_data/availability.csv', index = False)
+
+        return "Succesfully cancelled"
 
 @tool
 def get_catalog_specialists():
@@ -133,12 +150,21 @@ def get_catalog_specialists():
     return file
 
 @tool
-def set_appointment(desired_date:DateTimeModel, id_number:IdentificationNumberModel, specialization:Literal["general_dentist", "cosmetic_dentist", "prosthodontist", "pediatric_dentist","emergency_dentist","oral_surgeon","orthodontist"]):
+def set_appointment(desired_date:DateTimeModel, id_number:IdentificationNumberModel, specialization:Literal["general_dentist", "cosmetic_dentist", "prosthodontist", "pediatric_dentist","emergency_dentist","oral_surgeon","orthodontist"], doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
     """
     Set appointment with the doctor.
-The parameters should be mentioned by the user in the query.
+    The parameters should be mentioned by the user in the query.
     """
-    return True
+    df = pd.read_csv(f'{WORKDIR}/data/syntetic_data/availability.csv')
+    case = df[(df['date_slot'] == desired_date.date)&(df['specialization'] == specialization)&(df['doctor_name'] == doctor_name)&(df['is_available'] == True)]
+    if len(case) == 0:
+        return "No available appointments for that particular case"
+    else:
+        df.loc[(df['date_slot'] == desired_date.date) & (df['specialization'] == specialization) & (df['doctor_name'] == doctor_name) & (df['is_available'] == True), ['is_available','patient_to_attend']] = [False, id_number.id]
+
+        df.to_csv(f'{WORKDIR}/data/syntetic_data/availability.csv', index = False)
+
+        return "Succesfully done"
 
 @tool
 def check_results(id_number:IdentificationNumberModel):
@@ -152,7 +178,7 @@ def check_results(id_number:IdentificationNumberModel):
     if len(rows) == 0:
         return "The patient doesn´t have any study made"
     else:
-        return '\n'.join(', '.join(f"({col}: {row[col]})" for col in rows.columns) for _, row in rows.iterrows())
+        return "Founded in the database:\n"+ '\n'.join(', '.join(f"({col}: {row[col]})" for col in rows.columns) for _, row in rows.iterrows())
 
 @tool
 def reminder_appointment(id_number:IdentificationNumberModel):
@@ -160,7 +186,13 @@ def reminder_appointment(id_number:IdentificationNumberModel):
     Returns when the pacient has its appointment with the doctor
     The parameters should be mentioned by the user in the query
     """
-    return "You have for next monday at 7 am"
+    df = pd.read_csv(f'{WORKDIR}/data/syntetic_data/availability.csv')
+    rows = df[(df['patient_to_attend'] == id_number.id)][['time_slot','doctor_name','specialization']]
+    if len(rows) == 0:
+        return "The patient doesn´t have any appointment yet"
+    else:
+        return "Founded in the database:\n"+ '\n'.join(', '.join(f"({col}: {row[col]})" for col in rows.columns) for _, row in rows.iterrows())
+
 
 @tool
 def retrieve_faq_info(question:str):
@@ -198,7 +230,7 @@ def should_continue_with_feedback(state: MessagesState) -> Literal["agent", "end
 
 
 def call_model(state: MessagesState):
-    messages = [SystemMessage(content=f"You are helpful assistant in Ovide Clinic, dental care center in California (United States).\nAs reference, this is the CURRENT TIME: {datetime.now().strftime('%Y-%m-%d %H:%M, %A')}.\nKeep a friendly, professional tone.\n Before calling a tool, ensure the user passes all the necesarry parameters, don´t assume parameters that it didnt say.\nDon't force users to write in the way the system needs because it is your job to map the indication in the correct format.")] + state['messages']
+    messages = [SystemMessage(content=f"You are helpful assistant in Ovide Clinic, dental care center in California (United States).\nAs reference, this is the CURRENT TIME: {datetime.now().strftime('%Y-%m-%d %H:%M, %A')}.\nKeep a friendly, professional tone.\n Before calling a tool, ensure the user passes all the necesarry parameters, don´t assume parameters that it didnt say.\nRemember this: Don't force users to write in the way the system needs because it is your job to map the indication in the correct format.")] + state['messages']
     response = model.invoke(messages)
     return {"messages": [response]}
 
