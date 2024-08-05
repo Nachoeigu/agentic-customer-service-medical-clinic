@@ -1,0 +1,101 @@
+id_number,name,location,age,birth_date,sex
+1000000,Emma Johnson,Los Angeles,28,1996-06-19,F
+1000002,Liam Smith,San Francisco,34,1989-03-22,M
+1000003,Olivia Brown,San Diego,45,1978-01-10,F
+1000004,Noah Davis,San Jose,29,1994-11-30,M
+1000005,Ava Garcia,Sacramento,31,1992-07-05,F
+1000006,Isabella Martinez,Fresno,24,1999-05-16,F
+1000007,Lucas Rodriguez,Long Beach,37,1986-12-09,M
+1000008,Sophia Hernandez,Oakland,50,1973-08-21,F
+1000009,Mason Lopez,Bakersfield,42,1981-02-17,M
+1000010,Charlotte Wilson,Anaheim,26,1997-04-14,F
+1000011,Amelia Anderson,Santa Ana,33,1990-09-12,F
+1000012,Ethan Thomas,Chula Vista,39,1984-10-30,M
+1000013,Harper Taylor,San Bernardino,27,1996-01-19,F
+1000014,James Moore,Riverside,36,1987-03-11,M
+1000015,Abigail Jackson,Stockton,30,1993-06-25,F
+1000016,Alexander White,Chico,41,1982-02-05,M
+1000017,Emily Harris,Modesto,38,1985-07-28,F
+1000018,Daniel Martin,Palm Springs,32,1991-11-02,M
+1000019,Sofia Thompson,Hayward,29,1994-08-15,F
+1000020,Michael Garcia,Sunnyvale,44,1979-12-12,M
+1000021,Scarlett Martinez,Pasadena,25,1998-05-30,F
+1000022,Henry Robinson,Fullerton,35,1988-04-20,M
+1000023,Grace Clark,Orange,40,1983-09-23,F
+1000024,Jackson Lewis,Visalia,46,1977-02-14,M
+1000025,Chloe Lee,Elk Grove,28,1995-06-18,F
+1000026,David Walker,Salinas,34,1989-01-24,M
+1000027,Victoria Hall,San Mateo,47,1976-03-09,F
+1000028,Joseph Allen,Carlsbad,39,1984-10-28,M
+1000029,Zoey Young,Merced,30,1993-12-01,F
+1000030,Samuel King,Redwood City,42,1981-07-15,M
+1000031,Aria Wright,Mountain View,26,1997-08-05,F
+1000032,Matthew Scott,Westminster,33,1990-11-22,M
+1000033,Lucy Torres,Richmond,29,1994-04-10,F
+1000034,Andrew Nguyen,Chino,38,1985-05-03,M
+1000035,Ellie Hill,South Gate,31,1992-02-17,F
+1000036,Christopher Adams,San Marcos,48,1975-06-30,M
+1000037,Stella Baker,San Leandro,25,1998-09-14,F
+1000038,Joshua Gonzalez,La Habra,36,1987-12-02,M
+1000039,Penelope Nelson,Temecula,41,1982-03-20,F
+1000040,Jack Carter,Clovis,30,1993-01-29,M
+1000041,Avery Mitchell,Union City,27,1996-07-22,F
+1000042,Leo Perez,Antioch,34,1989-10-11,M
+1000043,Archer Roberts,San Rafael,39,1984-04-16,M
+1000044,Addison Turner,Compton,32,1991-05-28,F
+1000045,Isaac Phillips,San Bruno,45,1978-11-09,M
+1000046,Milana Campbell,Menifee,28,1995-06-04,F
+1000047,Caleb Parker,San Jose,35,1988-08-17,M
+1000048,Layla Evans,Oakland,42,1981-01-31,F
+1000049,Wyatt Edwards,Chula Vista,29,1994-03-25,M
+1000050,Naomi Collins,Modesto,43,1980-12-08,F
+1000051,Daniel Murphy,Los Angeles,34,1989-07-19,M
+1000052,Victoria Rivera,San Diego,27,1996-10-30,F
+1000053,James Bennett,San Francisco,38,1985-09-02,M
+1000054,Leah Wood,Long Beach,32,1991-02-24,F
+1000055,Henry Cooper,San Bernardino,29,1994-11-14,M
+1000056,Abigail Reed,Stockton,36,1987-03-06,F
+1000057,Leo Morgan,Sacramento,45,1978-05-17,M
+1000058,Isabella Bell,Fresno,30,1993-08-21,F
+1000059,Lucas Murphy,Chico,41,1982-12-27,M
+1000060,Emma Gomez,Hayward,26,1997-04-15,F
+1000061,Noah Brooks,Chino,38,1985-01-11,M
+1000062,Chloe Kelly,Carlsbad,32,1991-06-09,F
+1000063,Jackson Sanders,Sunnyvale,43,1980-03-18,M
+1000064,Scarlett Price,Elk Grove,29,1994-10-12,F
+1000065,Oliver Butler,Richmond,35,1988-08-22,M
+1000066,Grace Bennett,Chula Vista,31,1992-07-07,F
+1000067,Mason Morris,San Marcos,48,1975-12-30,M
+1000068,Lily Rivera,San Leandro,28,1995-05-26,F
+1000069,Samuel Diaz,Visalia,39,1984-01-03,M
+1000070,Emily Torres,Antioch,34,1989-09-15,F
+1000071,Daniel Hughes,San Bruno,42,1981-11-19,M
+1000072,Amelia Ramirez,Menifee,30,1993-06-02,F
+1000073,Caleb Foster,San Jose,35,1988-02-22,M
+1000074,Zoey James,Los Angeles,29,1994-08-05,F
+1000075,Henry Sanchez,San Francisco,36,1987-12-14,M
+1000076,Addison Watson,San Diego,31,1992-03-30,F
+1000077,Leo Cooper,Long Beach,44,1979-01-17,M
+1000078,Chloe Price,Chico,25,1998-11-26,F
+1000079,Isaac Bennett,Modesto,38,1985-07-03,M
+1000080,Harper Reed,Oakland,32,1991-10-16,F
+1000081,Joshua Hughes,Chula Vista,39,1984-04-12,M
+1000082,Layla Murphy,Carlsbad,30,1993-05-21,F
+1000083,Oliver Gonzalez,Stockton,45,1978-06-09,M
+1000084,Stella Martinez,San Bernardino,28,1995-09-20,F
+1000085,James Smith,San Jose,34,1989-02-02,M
+1000086,Emily Taylor,Los Angeles,27,1996-01-04,F
+1000087,Daniel Clark,Sacramento,35,1988-08-09,M
+1000088,Victoria Lewis,Fresno,42,1981-03-17,F
+1000089,Henry Walker,Hayward,30,1993-05-14,M
+1000090,Chloe Hall,Antioch,29,1994-12-22,F
+1000091,Leo Young,San Rafael,36,1987-06-18,M
+1000092,Addison Allen,Menifee,31,1992-11-30,F
+1000093,Isaac Martin,Chino,44,1979-02-01,M
+1000094,Zoey Nelson,San Diego,28,1995-04-10,F
+1000095,James Carter,Long Beach,39,1984-10-15,M
+1000096,Emma Scott,San Francisco,34,1989-07-20,F
+1000097,Daniel Turner,Los Angeles,30,1993-03-08,M
+1000098,Olivia Ramirez,Modesto,42,1981-05-25,F
+1000099,Henry Phillips,Chico,29,1994-09-11,M
+1000100,Amelia Evans,San Bernardino,36,1987-11-29,F

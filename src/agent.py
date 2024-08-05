@@ -74,7 +74,7 @@ class DateModel(BaseModel):
     
 class IdentificationNumberModel(BaseModel):
     """
-    The wat the DNI should be structured and formatted
+    The way the DNI should be structured and formatted
     """
     dni: int = Field(..., description="identification number without dots", pattern=r'^\d{7,8}$')
 
@@ -161,28 +161,9 @@ tools = [cancel_appointment, get_catalog_specialists, retrieve_faq_info, set_app
 
 tool_node = ToolNode(tools)
 
-#model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-model = ChatGoogleGenerativeAI(model = 'gemini-1.5-pro-exp-0801', temperature = 0)
-#model = model.bind_tools(tools = tools)
-from langchain_core.pydantic_v1 import BaseModel, Field
-
-
-class add(BaseModel):
-    """Add two integers."""
-
-    a: int = Field(..., description="First integer")
-    b: int = Field(..., description="Second integer")
-
-
-class multiply(BaseModel):
-    """Multiply two integers."""
-
-    a: int = Field(..., description="First integer")
-    b: int = Field(..., description="Second integer")
-tools = [add, multiply]
-model = model.bind_tools(tools)
-
-x = model.invoke('2+2?')
+model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+#model = ChatGoogleGenerativeAI(model = 'gemini-1.5-pro-exp-0801', temperature = 0)
+model = model.bind_tools(tools = tools)
 from datetime import datetime
 
 
@@ -203,7 +184,7 @@ def should_continue_with_feedback(state: MessagesState) -> Literal["agent", "end
 
 
 def call_model(state: MessagesState):
-    messages = [SystemMessage(content=f"You are helpful assistant in Ovide Clinic, dental care center in California (United States). As reference, this is the CURRENT TIME: {datetime.now().strftime('%Y-%m-%d %H:%M, %A')}. Keep a friendly, professional tone. Based your answers on the information from your tool calls.")] + state['messages']
+    messages = [SystemMessage(content=f"You are helpful assistant in Ovide Clinic, dental care center in California (United States).\nAs reference, this is the CURRENT TIME: {datetime.now().strftime('%Y-%m-%d %H:%M, %A')}.\nKeep a friendly, professional tone.\n If answer for user query is not in chat history, mandatory to call a tool.")] + state['messages']
     response = model.invoke(messages)
     return {"messages": [response]}
 
