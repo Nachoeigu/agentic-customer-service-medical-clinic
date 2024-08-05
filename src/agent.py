@@ -178,7 +178,7 @@ def check_results(id_number:IdentificationNumberModel):
     if len(rows) == 0:
         return "The patient doesn´t have any study made"
     else:
-        return "Founded in the database:\n"+ '\n'.join(', '.join(f"({col}: {row[col]})" for col in rows.columns) for _, row in rows.iterrows())
+        return rows
 
 @tool
 def reminder_appointment(id_number:IdentificationNumberModel):
@@ -191,7 +191,7 @@ def reminder_appointment(id_number:IdentificationNumberModel):
     if len(rows) == 0:
         return "The patient doesn´t have any appointment yet"
     else:
-        return "Founded in the database:\n"+ '\n'.join(', '.join(f"({col}: {row[col]})" for col in rows.columns) for _, row in rows.iterrows())
+        return rows
 
 
 @tool
@@ -224,13 +224,16 @@ def should_continue(state: MessagesState) -> Literal["tools", "human_feedback"]:
 def should_continue_with_feedback(state: MessagesState) -> Literal["agent", "end"]:
     messages = state['messages']
     last_message = messages[-1]
-    if (isinstance(last_message, HumanMessage))|(last_message.get("type","") == 'human'):
+    if isinstance(last_message, dict):
+        if last_message.get("type","") == 'human':
+            return "agent"
+    if (isinstance(last_message, HumanMessage)):
         return "agent"
     return "end"
 
 
 def call_model(state: MessagesState):
-    messages = [SystemMessage(content=f"You are helpful assistant in Ovide Clinic, dental care center in California (United States).\nAs reference, this is the CURRENT TIME: {datetime.now().strftime('%Y-%m-%d %H:%M, %A')}.\nKeep a friendly, professional tone.\n Before calling a tool, ensure the user passes all the necesarry parameters, don´t assume parameters that it didnt say.\nRemember this: Don't force users to write in the way the system needs because it is your job to map the indication in the correct format.")] + state['messages']
+    messages = [SystemMessage(content=f"You are helpful assistant in Ovide Clinic, dental care center in California (United States).\nAs reference, this is the CURRENT TIME: {datetime.now().strftime('%Y-%m-%d %H:%M, %A')}.\nKeep a friendly, professional tone.\nDon´t assume parameters in call functions that it didnt say.\nRemember this: Don't force users to write in the way the system needs because it is your job to map the indication in the correct format.")] + state['messages']
     response = model.invoke(messages)
     return {"messages": [response]}
 
