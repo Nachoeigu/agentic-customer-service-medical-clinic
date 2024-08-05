@@ -106,5 +106,9 @@
     {
         "question": "What should I expect during my first visit?",
         "answer": "During your first visit, we will review your medical and dental history, take X-rays, and perform a comprehensive exam. We will then discuss your treatment options and answer any questions you may have."
+    },
+    {
+        "question":"When and how can I access my dental study results?",
+        "answer":"Your dental study results will be available around 5 business days after your appointment. When they are ready, you can access them in the following ways:\n- Through our secure online portal: www.caovideclinic.org\n- Coming to our clinic whenever you want in our attention time."
     }
 ]

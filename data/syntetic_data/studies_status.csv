@@ -1,0 +1,41 @@
+patient_id,medical_study,is_available
+1000094,Plaque Index,False
+1000009,Cephalometric X-Ray,True
+1000079,CBCT Scan,True
+1000095,Periodontal Probing,False
+1000079,Cephalometric X-Ray,False
+1000026,Dental X-Ray,True
+1000052,Gingival Index,False
+1000055,Panoramic X-Ray,True
+1000032,Panoramic X-Ray,True
+1000096,Cephalometric X-Ray,False
+1000089,Occlusal Analysis,False
+1000041,Oral Cancer Screening,True
+1000044,CBCT Scan,True
+1000061,Oral Cancer Screening,True
+1000086,Dental X-Ray,True
+1000048,Gingival Index,False
+1000095,TMJ Examination,False
+1000024,Panoramic X-Ray,True
+1000082,Gingival Index,False
+1000000,Caries Risk Assessment,False
+1000006,CBCT Scan,True
+1000090,Caries Risk Assessment,False
+1000048,Cephalometric X-Ray,True
+1000016,Cephalometric X-Ray,False
+1000037,Gingival Index,False
+1000012,TMJ Examination,False
+1000037,Dental X-Ray,False
+1000089,CBCT Scan,True
+1000035,Gingival Index,True
+1000063,Bitewing X-Ray,True
+1000094,Occlusal Analysis,True
+1000047,Panoramic X-Ray,True
+1000002,Periodontal Probing,True
+1000046,Plaque Index,False
+1000010,Bitewing X-Ray,True
+1000060,Plaque Index,True
+1000010,Periodontal Probing,True
+1000055,TMJ Examination,True
+1000004,Cephalometric X-Ray,False
+1000072,Panoramic X-Ray,True

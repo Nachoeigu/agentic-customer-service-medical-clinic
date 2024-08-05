@@ -57,7 +57,7 @@ class DateTimeModel(BaseModel):
     @validator("date")
     def check_format_date(cls, v):
         if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$', v):
-            raise ValueError("Datetime must be in the format 'YYYY-MM-DD HH:MM'")
+            raise ValueError("The date should be in format 'YYYY-MM-DD HH:MM'")
         return v
 class DateModel(BaseModel):
     """
@@ -68,23 +68,22 @@ class DateModel(BaseModel):
     @validator("date")
     def check_format_date(cls, v):
         if not re.match(r'^\d{4}-\d{2}-\d{2}$', v):
-            raise ValueError("Date must be in the format 'YYYY-MM-DD'")
+            raise ValueError("The date must be in the format 'YYYY-MM-DD'")
         return v
 
     
 class IdentificationNumberModel(BaseModel):
     """
-    The way the DNI should be structured and formatted
+    The way the ID should be structured and formatted
     """
-    dni: int = Field(..., description="identification number without dots", pattern=r'^\d{7,8}$')
+    id: int = Field(..., description="identification number without dots", pattern=r'^\d{7,8}$')
 
-    @validator("dni")
-    def check_format_dni(cls, v):
+    @validator("id")
+    def check_format_id(cls, v):
         if not re.match(r'^\d{7,8}$',str(v)):
-            raise ValueError("DNI must be in the format a integer value of 7 or 8 numbers without dots")
+            raise ValueError("The ID number should be a number of 7 or 8 numbers")
         return v
     
-
 
 
 #All the tools to consider
@@ -97,8 +96,8 @@ def check_availability(desired_date:DateModel, specialization:Literal["general_d
     desired_date = desired_date.date
     #Dummy data
     df = pd.read_csv(f"{WORKDIR}/data/syntetic_data/availability.csv")
-    rows = df[(df['date_slot'].apply(lambda x : x.split(' ')[0]) == desired_date)&(df['specialization'] == specialization)&(df['is_available'] == True)][['doctor_name','date_slot']]
-    logger.info(rows)
+    rows = df[(df['date_slot'].str.split(' ').str[0] == desired_date) & (df['specialization'] == specialization) & (df['is_available'] == True)].groupby(['specialization', 'doctor_name'])['date_slot'].apply(list).reset_index(name='available_slots')
+
     if len(rows) == 0:
         output = "No availability in the entire day"
     else:
@@ -107,7 +106,7 @@ def check_availability(desired_date:DateModel, specialization:Literal["general_d
     return output
 
 @tool
-def reschedule_appointment(old_date:DateTimeModel, new_date:DateTimeModel, dni_number:IdentificationNumberModel, doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
+def reschedule_appointment(old_date:DateTimeModel, new_date:DateTimeModel, id_number:IdentificationNumberModel, doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
     """
     Rescheduling an appointment.
     The parameters should be mentioned by the user in the query.
@@ -115,7 +114,7 @@ def reschedule_appointment(old_date:DateTimeModel, new_date:DateTimeModel, dni_n
     return True
 
 @tool
-def cancel_appointment(date:DateTimeModel, dni_number:IdentificationNumberModel, doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
+def cancel_appointment(date:DateTimeModel, id_number:IdentificationNumberModel, doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
     """
     Canceling an appointment.
     The parameters should be mentioned by the user in the query.
@@ -134,7 +133,7 @@ def get_catalog_specialists():
     return file
 
 @tool
-def set_appointment(desired_date:DateTimeModel, dni_number:IdentificationNumberModel, specialization:Literal["general_dentist", "cosmetic_dentist", "prosthodontist", "pediatric_dentist","emergency_dentist","oral_surgeon","orthodontist"]):
+def set_appointment(desired_date:DateTimeModel, id_number:IdentificationNumberModel, specialization:Literal["general_dentist", "cosmetic_dentist", "prosthodontist", "pediatric_dentist","emergency_dentist","oral_surgeon","orthodontist"]):
     """
     Set appointment with the doctor.
 The parameters should be mentioned by the user in the query.
@@ -142,15 +141,21 @@ The parameters should be mentioned by the user in the query.
     return True
 
 @tool
-def check_results(dni_number:IdentificationNumberModel):
+def check_results(id_number:IdentificationNumberModel):
     """
     Check if the result of the pacient is available.
     The parameters should be mentioned by the user in the query
     """
-    return True
+    #Dummy data
+    df = pd.read_csv(f'{WORKDIR}/data/syntetic_data/studies_status.csv')
+    rows = df[(df['patient_id'] == id_number.id)][['medical_study','is_available']]
+    if len(rows) == 0:
+        return "The patient doesn´t have any study made"
+    else:
+        return '\n'.join(', '.join(f"({col}: {row[col]})" for col in rows.columns) for _, row in rows.iterrows())
 
 @tool
-def reminder_appointment(dni_number:IdentificationNumberModel):
+def reminder_appointment(id_number:IdentificationNumberModel):
     """
     Returns when the pacient has its appointment with the doctor
     The parameters should be mentioned by the user in the query
@@ -193,7 +198,7 @@ def should_continue_with_feedback(state: MessagesState) -> Literal["agent", "end
 
 
 def call_model(state: MessagesState):
-    messages = [SystemMessage(content=f"You are helpful assistant in Ovide Clinic, dental care center in California (United States).\nAs reference, this is the CURRENT TIME: {datetime.now().strftime('%Y-%m-%d %H:%M, %A')}.\nKeep a friendly, professional tone.\n Before calling a tool, ensure the user pass all the necesarry parameters, don´t assume parameters that it didnt say explicitly.\nDon't force users to write in the way the system needs. it is your job to understand the user indication in the correct format.")] + state['messages']
+    messages = [SystemMessage(content=f"You are helpful assistant in Ovide Clinic, dental care center in California (United States).\nAs reference, this is the CURRENT TIME: {datetime.now().strftime('%Y-%m-%d %H:%M, %A')}.\nKeep a friendly, professional tone.\n Before calling a tool, ensure the user passes all the necesarry parameters, don´t assume parameters that it didnt say.\nDon't force users to write in the way the system needs because it is your job to map the indication in the correct format.")] + state['messages']
     response = model.invoke(messages)
     return {"messages": [response]}
 
@@ -244,7 +249,7 @@ app = workflow.compile(checkpointer=checkpointer,
 if __name__ == '__main__':
     final_state = app.invoke(
         {"messages": [
-            HumanMessage(content="Do you have availability for tomorrow morning for dentist for my 5 years old kid?")
+            HumanMessage(content="I have some discounts if I go with my ensure")
             ]},
         config={"configurable": {"thread_id": 42}}
     )
