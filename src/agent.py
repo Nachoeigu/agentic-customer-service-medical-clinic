@@ -94,15 +94,17 @@ def check_availability(desired_date:DateModel, specialization:Literal["general_d
     Checking the database if we have availability for the specific specialization.
     The parameters should be mentioned by the user in the query
     """
-    desired_date = desired_date.date
     #Dummy data
     df = pd.read_csv(f"{WORKDIR}/data/syntetic_data/availability.csv")
-    rows = df[(df['date_slot'].str.split(' ').str[0] == desired_date) & (df['specialization'] == specialization) & (df['is_available'] == True)].groupby(['specialization', 'doctor_name'])['date_slot'].apply(list).reset_index(name='available_slots')
+    df['date_slot_time'] = df['date_slot'].apply(lambda input: input.split(' ')[-1])
+    rows = df[(df['date_slot'].apply(lambda input: input.split(' ')[0]) == desired_date.date) & (df['specialization'] == specialization) & (df['is_available'] == True)].groupby(['specialization', 'doctor_name'])['date_slot_time'].apply(list).reset_index(name='available_slots')
 
     if len(rows) == 0:
         output = "No availability in the entire day"
-    else:
-        output = "Founded in the database:\n"+'\n'.join(', '.join(f"({col}: {row[col]})" for col in rows.columns) for _, row in rows.iterrows())
+    else: 
+        output = f'This availability for {desired_date.date}\n'
+        for row in rows.values:
+            output += row[1] + ". Available slots: " + ', '.join(row[2])
 
     return output
 
@@ -233,19 +235,19 @@ def should_continue_with_feedback(state: MessagesState) -> Literal["agent", "end
 
 
 def call_model(state: MessagesState):
-    messages = [SystemMessage(content=f"You are helpful assistant in Ovide Clinic, dental care center in California (United States).\nAs reference, this is the CURRENT TIME: {datetime.now().strftime('%Y-%m-%d %H:%M, %A')}.\nKeep a friendly, professional tone.\nDon´t assume parameters in call functions that it didnt say.\nRemember this: Don't force users to write in the way the system needs because it is your job to map the indication in the correct format.")] + state['messages']
+    messages = [SystemMessage(content=f"You are helpful assistant in Ovide Clinic, dental care center in California (United States).\nAs reference, today is {datetime.now().strftime('%Y-%m-%d %H:%M, %A')}.\nKeep a friendly, professional tone.\nConsiderations:\n- Don´t assume parameters in call functions that it didnt say.\n- MUST NOT force users how to write. Let them write in the way they want.\n- The conversation should be very natural like a secretary talking with a client.")] + state['messages']
     response = model.invoke(messages)
     return {"messages": [response]}
 
 #The commented part is because it breaks the UI with the input function
 def read_human_feedback(state: MessagesState):
-    # if state['messages'][-1].tool_calls == []:
-    #     logger.info("AI: \n"+ state['messages'][-1].content)
-    #     user_msg = input("Reply: ")
-    #     return {'messages': [HumanMessage(content = user_msg)]}
-    # else:
-    #     pass
-    pass
+    if state['messages'][-1].tool_calls == []:
+        logger.info("AI: "+ state['messages'][-1].content)
+        user_msg = input("Reply: ")
+        return {'messages': [HumanMessage(content = user_msg)]}
+    else:
+        pass
+#    pass
 
 
 workflow = StateGraph(MessagesState)
@@ -279,12 +281,13 @@ workflow.add_edge("tools", 'agent')
 checkpointer = MemorySaver()
 
 app = workflow.compile(checkpointer=checkpointer,
-                       interrupt_before=['human_feedback'])
+                       #interrupt_before=['human_feedback']
+                       )
 
 if __name__ == '__main__':
     final_state = app.invoke(
         {"messages": [
-            HumanMessage(content="I have some discounts if I go with my ensure")
+            HumanMessage(content="Hi, nice to meet you")
             ]},
         config={"configurable": {"thread_id": 42}}
     )
