@@ -1,0 +1,109 @@
+[
+    {
+        "specialization": "General Dentist",
+        "responsibilities": [
+            "Performs routine check-ups, cleanings, exams, and preventive care.",
+            "Handles basic restorative work such as fillings and extractions.",
+            "Conducts oral cancer screenings and provides fluoride treatments."
+        ],
+        "dentists": [
+            {
+                "name": "Dr. John Doe",
+                "license_number": "GD123456"
+            },
+            {
+                "name": "Dr. Emily Johnson",
+                "license_number": "GD654321"
+            }
+        ]
+    },
+    {
+        "specialization": "Cosmetic Dentist",
+        "responsibilities": [
+            "Specializes in improving the appearance of teeth and smiles.",
+            "Performs procedures such as teeth whitening, veneers, and bonding.",
+            "Offers Invisalign and other cosmetic alignment solutions."
+        ],
+        "dentists": [
+            {
+                "name": "Dr. Jane Smith",
+                "license_number": "CD234567"
+            },
+            {
+                "name": "Dr. Lisa Brown",
+                "license_number": "CD765432"
+            }
+        ]
+    },
+    {
+        "specialization": "Prosthodontist",
+        "responsibilities": [
+            "Specializes in restorative treatments like crowns, bridges, and dentures.",
+            "Manages complex dental restorations and dental implants.",
+            "Focuses on restoring the function and aesthetics of the oral cavity."
+        ],
+        "dentists": [
+            {
+                "name": "Dr. Michael Green",
+                "license_number": "PR345678"
+            }
+        ]
+    },
+    {
+        "specialization": "Pediatric Dentist (Pedodontist)",
+        "responsibilities": [
+            "Provides dental care tailored to children and teenagers.",
+            "Ensures a comfortable and positive experience for young patients.",
+            "Focuses on preventive care and education for children."
+        ],
+        "dentists": [
+            {
+                "name": "Dr. Sarah Wilson",
+                "license_number": "PD456789"
+            }
+        ]
+    },
+    {
+        "specialization": "Emergency Dentist",
+        "responsibilities": [
+            "Handles urgent dental issues, including toothaches and broken teeth.",
+            "Provides immediate care for dental emergencies."
+        ],
+        "dentists": [
+            {
+                "name": "Dr. Daniel Miller",
+                "license_number": "ED567890"
+            },
+            {
+                "name": "Dr. Susan Davis",
+                "license_number": "ED098765"
+            }
+        ]
+    },
+    {
+        "specialization": "Oral Surgeon",
+        "responsibilities": [
+            "Performs complex extractions and surgical procedures.",
+            "Handles implant placements and other oral surgeries."
+        ],
+        "dentists": [
+            {
+                "name": "Dr. Robert Martinez",
+                "license_number": "OS678901"
+            }
+        ]
+    },
+    {
+        "specialization": "Orthodontist",
+        "responsibilities": [
+            "Specializes in the alignment of teeth and jaws using braces or Invisalign.",
+            "Manages the development of facial growth and dental development."
+        ],
+        "dentists": [
+            {
+                "name": "Dr. Kevin Anderson",
+                "license_number": "OR789012"
+            }
+        ]
+    }
+]

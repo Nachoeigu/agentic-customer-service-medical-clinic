@@ -12,16 +12,12 @@
         "answer": "We accept most major dental insurance plans, including Delta Dental, Aetna, MetLife, Cigna, and UnitedHealthcare. We also work with many other PPO plans. Please provide your insurance information when scheduling your appointment so we can verify your coverage."
     },
     {
-        "question": "What services do you offer?",
-        "answer": "We offer a wide range of dental services, including: General Dentistry (cleanings, exams, fillings, extractions), Cosmetic Dentistry (teeth whitening, veneers, bonding), Restorative Dentistry (crowns, bridges, implants), and Emergency Dental Care (treatment for toothaches, broken teeth, and other urgent dental issues)."
-    },
-    {
         "question": "Are you accepting new patients?",
         "answer": "Yes, we are always happy to welcome new patients to our practice."
     },
     {
         "question": "Do you offer emergency dental services?",
-        "answer": "Yes, we offer emergency dental services during our regular operating hours. If you are experiencing a dental emergency, please call our office immediately (405 910 189 291) and we will do our best to see you as soon as possible."
+        "answer": "Yes, we offer emergency dental services during our regular operating hours. If you are experiencing a dental emergency, please call our office immediately (405 910 189 291), or come to the clinic and we will do our best to see you as soon as possible."
     },
     {
         "question": "What should I do if I have a dental emergency outside of operating hours?",
@@ -44,10 +40,6 @@
         "answer": "Yes, we are committed to using environmentally friendly dental products whenever possible. We use digital X-rays to reduce radiation exposure and minimize waste. We also choose products and materials that are biocompatible and sustainable."
     },
     {
-        "question": "Do you provide pediatric dental services?",
-        "answer": "Yes, we provide comprehensive dental services for children of all ages, including infants, toddlers, and teenagers. We strive to create a positive and comfortable experience for our young patients."
-    },
-    {
         "question": "How much does the first session cost?",
         "answer": "The cost of the first session typically ranges from $100 to $200, depending on the services required. This usually includes a comprehensive examination, X-rays, and a cleaning. We will provide you with a detailed breakdown of the costs before any treatment is performed."
     },
@@ -56,16 +48,12 @@
         "answer": "Pricing for different dental specialties is determined by factors such as the complexity of the procedure, the time required, the materials used, and the expertise of the dentist. We will provide you with a clear explanation of the costs associated with your specific treatment plan."
     },
     {
-        "question": "Do you offer payment plans or financing options?",
-        "answer": "Yes, we offer flexible payment plans and financing options through third-party providers such as CareCredit. These options allow you to spread out the cost of your dental treatment over time with convenient monthly payments."
-    },
-    {
         "question": "What forms of payment do you accept?",
         "answer": "We accept cash, checks, major credit cards (Visa, Mastercard, Discover, American Express), and debit cards."
     },
     {
         "question": "Do you offer discounts for senior citizens or students?",
-        "answer": "Yes, we offer a 10% discount for senior citizens over the age of 65 and a 5% discount for students with a valid student ID."
+        "answer": "No"
     },
     {
         "question": "Are consultations free?",
@@ -100,24 +88,8 @@
         "answer": "The lifespan of a filling depends on the material used and how well you care for your teeth. With proper care, fillings can last for many years."
     },
     {
-        "question": "Do you offer dental implants?",
-        "answer": "Yes, we offer dental implant placement and restoration."
-    },
-    {
-        "question": "What are the different types of dental crowns?",
-        "answer": "We offer various types of dental crowns, including porcelain, ceramic, and gold. We will discuss which option is best for you based on your individual needs and preferences."
-    },
-    {
-        "question": "Do you offer Invisalign?",
-        "answer": "Yes, we offer Invisalign clear aligners as an alternative to traditional braces."
-    },
-    {
         "question": "How much does a dental cleaning cost?",
         "answer": "The cost of a dental cleaning varies depending on your individual needs and insurance coverage. We will provide you with a cost estimate before any treatment is performed."
-    },
-    {
-        "question": "Do you offer dentures?",
-        "answer": "Yes, we offer both full and partial dentures."
     },
     {
         "question": "What are your COVID-19 safety protocols?",
@@ -126,18 +98,6 @@
     {
         "question": "Do you have a website?",
         "answer": "Yes, our website is www.caovideclinic.org. You can find more information about our services, our team, and our practice on our website."
-    },
-    {
-        "question": "Do you offer oral cancer screenings?",
-        "answer": "Yes, we perform oral cancer screenings as part of our routine dental check-ups."
-    },
-    {
-        "question": "Do you offer fluoride treatments?",
-        "answer": "Yes, we offer fluoride treatments to help strengthen teeth and prevent cavities."
-    },
-    {
-        "question": "Do you offer nitrous oxide (laughing gas)?",
-        "answer": "Yes, we offer nitrous oxide as a sedation option for patients who experience dental anxiety."
     },
     {
         "question": "Do you offer payment plans?",
