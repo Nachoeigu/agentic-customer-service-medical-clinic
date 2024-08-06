@@ -8,11 +8,11 @@
         ],
         "dentists": [
             {
-                "name": "Dr. John Doe",
+                "name": "John Doe",
                 "license_number": "GD123456"
             },
             {
-                "name": "Dr. Emily Johnson",
+                "name": "Emily Johnson",
                 "license_number": "GD654321"
             }
         ]
@@ -26,11 +26,11 @@
         ],
         "dentists": [
             {
-                "name": "Dr. Jane Smith",
+                "name": "Jane Smith",
                 "license_number": "CD234567"
             },
             {
-                "name": "Dr. Lisa Brown",
+                "name": "Lisa Brown",
                 "license_number": "CD765432"
             }
         ]
@@ -44,7 +44,7 @@
         ],
         "dentists": [
             {
-                "name": "Dr. Michael Green",
+                "name": "Michael Green",
                 "license_number": "PR345678"
             }
         ]
@@ -58,7 +58,7 @@
         ],
         "dentists": [
             {
-                "name": "Dr. Sarah Wilson",
+                "name": "Sarah Wilson",
                 "license_number": "PD456789"
             }
         ]
@@ -71,11 +71,11 @@
         ],
         "dentists": [
             {
-                "name": "Dr. Daniel Miller",
+                "name": "Daniel Miller",
                 "license_number": "ED567890"
             },
             {
-                "name": "Dr. Susan Davis",
+                "name": "Susan Davis",
                 "license_number": "ED098765"
             }
         ]
@@ -88,7 +88,7 @@
         ],
         "dentists": [
             {
-                "name": "Dr. Robert Martinez",
+                "name": "Robert Martinez",
                 "license_number": "OS678901"
             }
         ]
@@ -101,7 +101,7 @@
         ],
         "dentists": [
             {
-                "name": "Dr. Kevin Anderson",
+                "name": "Kevin Anderson",
                 "license_number": "OR789012"
             }
         ]

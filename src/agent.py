@@ -86,10 +86,28 @@ class IdentificationNumberModel(BaseModel):
         return v
     
 
-
 #All the tools to consider
 @tool
-def check_availability(desired_date:DateModel, specialization:Literal["general_dentist", "cosmetic_dentist", "prosthodontist", "pediatric_dentist","emergency_dentist","oral_surgeon","orthodontist"]):
+def check_availability_by_doctor(desired_date:DateModel, doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
+    """
+    Checking the database if we have availability for the specific doctor.
+    The parameters should be mentioned by the user in the query
+    """
+    #Dummy data
+    df = pd.read_csv(f"{WORKDIR}/data/syntetic_data/availability.csv")
+    df['date_slot_time'] = df['date_slot'].apply(lambda input: input.split(' ')[-1])
+    rows = list(df[(df['date_slot'].apply(lambda input: input.split(' ')[0]) == desired_date.date)&(df['doctor_name'] == doctor_name)&(df['is_available'] == True)]['date_slot_time'])
+
+    if len(rows) == 0:
+        output = "No availability in the entire day"
+    else:
+        output = f'This availability for {desired_date.date}\n'
+        output += "Available slots: " + ', '.join(rows)
+
+    return output
+
+
+def check_availability_by_specialization(desired_date:DateModel, specialization:Literal["general_dentist", "cosmetic_dentist", "prosthodontist", "pediatric_dentist","emergency_dentist","oral_surgeon","orthodontist"]):
     """
     Checking the database if we have availability for the specific specialization.
     The parameters should be mentioned by the user in the query
@@ -104,7 +122,7 @@ def check_availability(desired_date:DateModel, specialization:Literal["general_d
     else:
         output = f'This availability for {desired_date.date}\n'
         for row in rows.values:
-            output += row[1] + ". Available slots: " + ', '.join(row[2]+'\n')
+            output += row[1] + ". Available slots: " + ', '.join(row[2])+'\n'
 
     return output
 
@@ -120,8 +138,8 @@ def reschedule_appointment(old_date:DateTimeModel, new_date:DateTimeModel, id_nu
     if len(available_for_desired_date) == 0:
         return "Not available slots in the desired period"
     else:
-        cancel_appointment(date = old_date.date, id_number = id_number.id)
-        set_appointment(desired_date = new_date.date, id_number = id_number.id)
+        cancel_appointment.invoke({'date':old_date, 'id_number':id_number, 'doctor_name':doctor_name})
+        set_appointment.invoke({'desired_date':new_date, 'id_number': id_number, 'doctor_name': doctor_name})
         return "Succesfully rescheduled for the desired time"
 
 @tool
@@ -152,17 +170,17 @@ def get_catalog_specialists():
     return file
 
 @tool
-def set_appointment(desired_date:DateTimeModel, id_number:IdentificationNumberModel, specialization:Literal["general_dentist", "cosmetic_dentist", "prosthodontist", "pediatric_dentist","emergency_dentist","oral_surgeon","orthodontist"], doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
+def set_appointment(desired_date:DateTimeModel, id_number:IdentificationNumberModel, doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
     """
     Set appointment with the doctor.
     The parameters should be mentioned by the user in the query.
     """
     df = pd.read_csv(f'{WORKDIR}/data/syntetic_data/availability.csv')
-    case = df[(df['date_slot'] == desired_date.date)&(df['specialization'] == specialization)&(df['doctor_name'] == doctor_name)&(df['is_available'] == True)]
+    case = df[(df['date_slot'] == desired_date.date)&(df['doctor_name'] == doctor_name)&(df['is_available'] == True)]
     if len(case) == 0:
         return "No available appointments for that particular case"
     else:
-        df.loc[(df['date_slot'] == desired_date.date) & (df['specialization'] == specialization) & (df['doctor_name'] == doctor_name) & (df['is_available'] == True), ['is_available','patient_to_attend']] = [False, id_number.id]
+        df.loc[(df['date_slot'] == desired_date.date)&(df['doctor_name'] == doctor_name) & (df['is_available'] == True), ['is_available','patient_to_attend']] = [False, id_number.id]
 
         df.to_csv(f'{WORKDIR}/data/syntetic_data/availability.csv', index = False)
 
@@ -205,7 +223,19 @@ def retrieve_faq_info(question:str):
     """
     return rag_chain.invoke(question)
 
-tools = [cancel_appointment, get_catalog_specialists, retrieve_faq_info, set_appointment, reminder_appointment, check_availability, check_results,reschedule_appointment, reschedule_appointment]
+@tool
+def obtain_specialization_by_doctor(doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
+    """
+    Retrieve which specialization covers a specific doctor.
+    Use this internal tool if you need more information about a doctor for setting an appointment.
+    """
+    with open(f"{WORKDIR}/data/catalog.json","r") as file:
+        catalog = json.loads(file.read())
+
+    return str([{specialization['specialization']: [dentist['name'] for dentist in specialization['dentists']]} for specialization in catalog])
+    
+
+tools = [obtain_specialization_by_doctor, check_availability_by_doctor, check_availability_by_specialization, cancel_appointment, get_catalog_specialists, retrieve_faq_info, set_appointment, reminder_appointment, check_results,reschedule_appointment, reschedule_appointment]
 
 tool_node = ToolNode(tools)
 
@@ -226,28 +256,28 @@ def should_continue(state: MessagesState) -> Literal["tools", "human_feedback"]:
 def should_continue_with_feedback(state: MessagesState) -> Literal["agent", "end"]:
     messages = state['messages']
     last_message = messages[-1]
-    if isinstance(last_message, dict):
-        if last_message.get("type","") == 'human':
-            return "agent"
+    # if isinstance(last_message, dict):
+    #     if last_message.get("type","") == 'human':
+    #         return "agent"
     if (isinstance(last_message, HumanMessage)):
         return "agent"
     return "end"
 
 
 def call_model(state: MessagesState):
-    messages = [SystemMessage(content=f"You are helpful assistant in Ovide Clinic, dental care center in California (United States).\nAs reference, today is {datetime.now().strftime('%Y-%m-%d %H:%M, %A')}.\nKeep a friendly, professional tone.\nConsiderations:\n- Don´t assume parameters in call functions that it didnt say.\n- MUST NOT force users how to write. Let them write in the way they want.\n- The conversation should be very natural like a secretary talking with a client.")] + state['messages']
+    messages = [SystemMessage(content=f"You are helpful assistant in Ovide Clinic, dental care center in California (United States).\nAs reference, today is {datetime.now().strftime('%Y-%m-%d %H:%M, %A')}.\nKeep a friendly, professional tone.\nAvoid verbosity.\nConsiderations:\n- Don´t assume parameters in call functions that it didnt say.\n- MUST NOT force users how to write. Let them write in the way they want.\n- The conversation should be very natural like a secretary talking with a client.\n- Call only ONE tool at a time.")] + state['messages']
     response = model.invoke(messages)
     return {"messages": [response]}
 
 #The commented part is because it breaks the UI with the input function
 def read_human_feedback(state: MessagesState):
-    # if state['messages'][-1].tool_calls == []:
-    #     logger.info("AI: "+ state['messages'][-1].content)
-    #     user_msg = input("Reply: ")
-    #     return {'messages': [HumanMessage(content = user_msg)]}
-    # else:
-    #     pass
-    pass
+    if state['messages'][-1].tool_calls == []:
+        logger.info("AI: "+ state['messages'][-1].content)
+        user_msg = input("Reply: ")
+        return {'messages': [HumanMessage(content = user_msg)]}
+    else:
+        pass
+#    pass
 
 
 workflow = StateGraph(MessagesState)
@@ -280,14 +310,12 @@ workflow.add_edge("tools", 'agent')
 
 checkpointer = MemorySaver()
 
-app = workflow.compile(checkpointer=checkpointer,
-                       interrupt_before=['human_feedback']
-                       )
+app = workflow.compile(checkpointer=checkpointer)
 
 if __name__ == '__main__':
     final_state = app.invoke(
         {"messages": [
-            HumanMessage(content="Hi, nice to meet you")
+            HumanMessage(content=input("Put your question: "))
             ]},
         config={"configurable": {"thread_id": 42}}
     )
