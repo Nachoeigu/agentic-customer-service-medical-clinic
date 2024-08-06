@@ -101,10 +101,10 @@ def check_availability(desired_date:DateModel, specialization:Literal["general_d
 
     if len(rows) == 0:
         output = "No availability in the entire day"
-    else: 
+    else:
         output = f'This availability for {desired_date.date}\n'
         for row in rows.values:
-            output += row[1] + ". Available slots: " + ', '.join(row[2])
+            output += row[1] + ". Available slots: " + ', '.join(row[2]+'\n')
 
     return output
 
@@ -241,13 +241,13 @@ def call_model(state: MessagesState):
 
 #The commented part is because it breaks the UI with the input function
 def read_human_feedback(state: MessagesState):
-    if state['messages'][-1].tool_calls == []:
-        logger.info("AI: "+ state['messages'][-1].content)
-        user_msg = input("Reply: ")
-        return {'messages': [HumanMessage(content = user_msg)]}
-    else:
-        pass
-#    pass
+    # if state['messages'][-1].tool_calls == []:
+    #     logger.info("AI: "+ state['messages'][-1].content)
+    #     user_msg = input("Reply: ")
+    #     return {'messages': [HumanMessage(content = user_msg)]}
+    # else:
+    #     pass
+    pass
 
 
 workflow = StateGraph(MessagesState)
@@ -281,7 +281,7 @@ workflow.add_edge("tools", 'agent')
 checkpointer = MemorySaver()
 
 app = workflow.compile(checkpointer=checkpointer,
-                       #interrupt_before=['human_feedback']
+                       interrupt_before=['human_feedback']
                        )
 
 if __name__ == '__main__':
