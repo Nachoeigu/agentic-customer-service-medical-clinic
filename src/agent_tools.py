@@ -65,7 +65,7 @@ def check_availability_by_specialization(desired_date:DateModel, specialization:
 def reschedule_appointment(old_date:DateTimeModel, new_date:DateTimeModel, id_number:IdentificationNumberModel, doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
     """
     Rescheduling an appointment.
-    The parameters should be mentioned by the user in the query.
+    The parameters MUST be mentioned by the user in the query.
     """
     #Dummy data
     df = pd.read_csv(f'{WORKDIR}/data/syntetic_data/availability.csv')
@@ -81,7 +81,7 @@ def reschedule_appointment(old_date:DateTimeModel, new_date:DateTimeModel, id_nu
 def cancel_appointment(date:DateTimeModel, id_number:IdentificationNumberModel, doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
     """
     Canceling an appointment.
-    The parameters should be mentioned by the user in the query.
+    The parameters MUST be mentioned by the user in the query.
     """
     df = pd.read_csv(f'{WORKDIR}/data/syntetic_data/availability.csv')
     case_to_remove = df[(df['date_slot'] == date.date)&(df['patient_to_attend'] == id_number.id)&(df['doctor_name'] == doctor_name)]
@@ -97,7 +97,7 @@ def cancel_appointment(date:DateTimeModel, id_number:IdentificationNumberModel, 
 def get_catalog_specialists():
     """
     Obtain information about the doctors and specializations/services we provide.
-    The parameters should be mentioned by the user in the query
+    The parameters MUST be mentioned by the user in the query
     """
     with open(f"{WORKDIR}/data/catalog.json","r") as file:
         file = json.loads(file.read())
@@ -108,7 +108,7 @@ def get_catalog_specialists():
 def set_appointment(desired_date:DateTimeModel, id_number:IdentificationNumberModel, doctor_name:Literal['kevin anderson','robert martinez','susan davis','daniel miller','sarah wilson','michael green','lisa brown','jane smith','emily johnson','john doe']):
     """
     Set appointment with the doctor.
-    The parameters should be mentioned by the user in the query.
+    The parameters MUST be mentioned by the user in the query.
     """
     df = pd.read_csv(f'{WORKDIR}/data/syntetic_data/availability.csv')
     case = df[(df['date_slot'] == desired_date.date)&(df['doctor_name'] == doctor_name)&(df['is_available'] == True)]
@@ -125,7 +125,7 @@ def set_appointment(desired_date:DateTimeModel, id_number:IdentificationNumberMo
 def check_results(id_number:IdentificationNumberModel):
     """
     Check if the result of the pacient is available.
-    The parameters should be mentioned by the user in the query
+    The parameters MUST be mentioned by the user in the query
     """
     #Dummy data
     df = pd.read_csv(f'{WORKDIR}/data/syntetic_data/studies_status.csv')
@@ -139,7 +139,7 @@ def check_results(id_number:IdentificationNumberModel):
 def reminder_appointment(id_number:IdentificationNumberModel):
     """
     Returns when the pacient has its appointment with the doctor
-    The parameters should be mentioned by the user in the query
+    The parameters MUST be mentioned by the user in the query
     """
     df = pd.read_csv(f'{WORKDIR}/data/syntetic_data/availability.csv')
     rows = df[(df['patient_to_attend'] == id_number.id)][['time_slot','doctor_name','specialization']]

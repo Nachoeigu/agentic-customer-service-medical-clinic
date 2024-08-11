@@ -9,3 +9,5 @@ pinecone
 jq
 langchain-google-genai
 pandas
+langchain_anthropic
+langchain_groq
