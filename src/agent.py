@@ -32,7 +32,7 @@ tool_node = ToolNode(tools)
 
 
 model = get_model('meta')
-model = model.bind_tools(tools = tools)
+model = model.bind_tools(tools = tools, strict=True)
 
 def should_continue(state: MessagesState) -> Literal["tools", "human_feedback"]:
     messages = state['messages']
