@@ -32,7 +32,7 @@ tool_node = ToolNode(tools)
 
 
 model = get_model('meta')
-model = model.bind_tools(tools = tools, strict=True)
+model = model.bind_tools(tools = tools)
 
 def should_continue(state: MessagesState) -> Literal["tools", "human_feedback"]:
     messages = state['messages']
@@ -58,14 +58,7 @@ def call_model(state: MessagesState):
     response = model.invoke(messages)
     return {"messages": [response]}
 
-#The commented part is because it breaks the UI with the input function
 def read_human_feedback(state: MessagesState):
-    # if state['messages'][-1].tool_calls == []:
-    #     logger.info("AI: "+ state['messages'][-1].content)
-    #     user_msg = input("Reply: ")
-    #     return {'messages': [HumanMessage(content = user_msg)]}
-    # else:
-    #     pass
     pass
 
 
@@ -94,11 +87,22 @@ checkpointer = MemorySaver()
 app = workflow.compile(checkpointer=checkpointer, 
                        interrupt_before=['human_feedback'])
 
+if __name__ == '__main__':
+    while True:
+        question = input("Put your question: ")
 
-# final_state = app.invoke(
-#     {"messages": [
-#         HumanMessage(content=input("Put your question: "))
-#         ]},
-#     config={"configurable": {"thread_id": 42}}
-# )
-# logger.info(final_state["messages"][-1].content)
+        for event in app.stream(
+            {"messages": [
+                HumanMessage(content=question)
+                ]},
+            config={"configurable": {"thread_id": 42}}
+            ):
+            if event.get("agent","") == "":
+                continue
+            else:
+                msg = event['agent']['messages'][-1].content
+                if msg == '':
+                    continue
+                else:
+                    print(msg)
+
